@@ -9,14 +9,26 @@ import { Hero } from '../hero';
 export class HeroesComponent {
   heroes:Hero[] = [];
   constructor(private heroService:HeroService,){}
-  
+  add(name:string)  :void{
+    name=name.trim()
+    if(!name){return;}
+    this.heroService.addHero({name}as Hero)
+    .subscribe(h=>{
+      this.heroes.push(h)
+    })
+  }
   getHeros():void{
     this.heroService.getHeroes().subscribe(
       heroes=>this.heroes=heroes
     );
   }
+  delete(hero:Hero):void{
+    this.heroes=this.heroes.filter(h=>{return h!==hero})
+    this.heroService.deleteHero(hero.id).subscribe();
+  }
   ngOnInit():void{
     this.getHeros()
   }
+
   
 }
